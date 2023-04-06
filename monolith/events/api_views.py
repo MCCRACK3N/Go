@@ -9,7 +9,10 @@ from .models import Conference, Location, State
 
 class LocationListEncoder(ModelEncoder):
     model = Location
-    properties = ["name"]
+    properties = [
+        "name",
+        "id",
+        ]
 
 
 class LocationDetailEncoder(ModelEncoder):
@@ -29,7 +32,11 @@ class LocationDetailEncoder(ModelEncoder):
 
 class ConferenceListEncoder(ModelEncoder):
     model = Conference
-    properties = ["name"]
+    properties = [
+        "name",
+        "starts",
+        "ends",
+                  ]
 
 
 class ConferenceDetailEncoder(ModelEncoder):
@@ -48,7 +55,17 @@ class ConferenceDetailEncoder(ModelEncoder):
     encoders = {
         "location": LocationListEncoder(),
     }
-
+@require_http_methods(["GET"])
+def api_list_states(request):
+    if request.method == "GET":
+        state_list = []
+        for state in State.objects.all():
+            state_dict = {
+                "name": state.name,
+                "abbreviation": state.abbreviation
+            }
+            state_list.append(state_dict)
+        return JsonResponse({"states": state_list})
 
 @require_http_methods(["GET", "POST"])
 def api_list_conferences(request):
