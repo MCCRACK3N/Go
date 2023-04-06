@@ -12,6 +12,7 @@ class LocationListEncoder(ModelEncoder):
     properties = [
         "name",
         "id",
+        "picture_url",
         ]
 
 
